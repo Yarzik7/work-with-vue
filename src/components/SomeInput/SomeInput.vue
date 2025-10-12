@@ -3,7 +3,7 @@
     <label :for="forId" class="label">{{ labelText }}</label>
     <v-textarea v-if="type === 'textarea'" :value="value" :id="forId" class="v-input-wrap" @input="onInput" />
     <v-text-field v-if="type === 'text'" :value="value" :id="forId" class="v-input-wrap" @input="onInput" />
-    <v-btn-toggle v-if="type === 'checkBtns'" v-model="ckeckBtnsVal" dense background-color="primary" dark multiple>
+    <v-btn-toggle v-if="type === 'checkBtns'" dense background-color="primary" dark multiple>
       <v-btn v-for="(item, index) in checkBtnEntries" :key="index" @input="onCheckInput($event, item)">
         {{ item[0] }}
       </v-btn>
@@ -35,7 +35,6 @@ export default {
     return {
       forId: crypto.randomUUID(),
       inputValue: '',
-      ckeckBtnsVal: [],
     };
   },
   computed: {
