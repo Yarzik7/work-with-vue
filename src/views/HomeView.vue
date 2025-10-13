@@ -9,6 +9,38 @@
         label-text="Test textarea"
         @input="onThisFormInput($event, 'template')"
       />
+      <some-input
+        :value="someType"
+        type="select"
+        label-text="Select"
+        :items="typeItems"
+        :item-text="'text'"
+        :item-value="'value'"
+        @input="onThisFormInput($event, 'someType')"
+      />
+      <div v-if="someType">
+        <some-input
+          v-if="someType === 't_1'"
+          :value="someOps1"
+          type="multi-select"
+          label-text="Multi Select 1"
+          :items="optionItems1"
+          :item-text="'text'"
+          :item-value="'value'"
+          @input="onThisFormInput($event, 'someOps1')"
+        />
+        <some-input
+          v-else
+          :value="someOps2"
+          type="multi-select"
+          label-text="Multi Select 2"
+          :items="optionItems2"
+          :item-text="'text'"
+          :item-value="'value'"
+          @input="onThisFormInput($event, 'someOps2')"
+        />
+      </div>
+
       <some-input :value="text" label-text="Test field" @input="onThisFormInput($event, 'text')" />
     </v-form>
     <div class="form-control-box">
@@ -25,9 +57,27 @@ export default {
     SomeInput,
   },
   data: () => ({
+    typeItems: [
+      { text: 'OneT', value: 't_1' },
+      { text: 'TwoT', value: 't_2' },
+      { text: 'ThreeT', value: 't_3' },
+    ],
+    optionItems1: [
+      { text: 'OneOp1', value: 'op1_1' },
+      { text: 'TwoOp1', value: 'op1_2' },
+      { text: 'ThreeOp1', value: 'op1_3' },
+    ],
+    optionItems2: [
+      { text: 'OneOp2', value: 'op2_1' },
+      { text: 'TwoOp2', value: 'op2_2' },
+      { text: 'ThreeOp2', value: 'op2_3' },
+    ],
     someMap: [],
     template: '',
     text: '',
+    someType: '',
+    someOps1: [],
+    someOps2: [],
   }),
   mounted() {
     this.getTemplate();
@@ -46,7 +96,13 @@ export default {
     },
     onSubmit() {
       console.log('Submit');
-      console.log({ template: this.template, text: this.text });
+      console.log({
+        template: this.template,
+        text: this.text,
+        someType: this.someType,
+        ops1: this.someOps1,
+        ops2: this.someOps2,
+      });
     },
     onThisFormInput(event, field) {
       if (!field) return;

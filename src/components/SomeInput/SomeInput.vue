@@ -8,6 +8,29 @@
         {{ item[0] }}
       </v-btn>
     </v-btn-toggle>
+    <v-select
+      v-if="type === 'select'"
+      :value="value"
+      :id="forId"
+      :items="items"
+      :item-text="itemText"
+      :item-value="itemValue"
+      class="v-input-wrap"
+      filled
+      outlined
+      @input="onInput"
+    ></v-select>
+    <v-autocomplete
+      v-if="type === 'multi-select'"
+      :value="value"
+      :id="forId"
+      :items="items"
+      :item-text="itemText"
+      :item-value="itemValue"
+      class="v-input-wrap"
+      @input="onInput"
+      multiple
+    ></v-autocomplete>
   </div>
 </template>
 <script>
@@ -26,15 +49,22 @@ export default {
       type: [String, Number, Array, Object],
       default: [],
     },
-    elRef: {
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    itemText: {
       type: String,
-      default: '',
+      default: 'text',
+    },
+    itemValue: {
+      type: String,
+      default: 'value',
     },
   },
   data() {
     return {
       forId: crypto.randomUUID(),
-      inputValue: '',
     };
   },
   computed: {
