@@ -3,7 +3,7 @@
     <label :for="forId" class="label">{{ labelText }}</label>
     <v-textarea v-if="type === 'textarea'" :value="value" :id="forId" class="v-input-wrap" @input="onInput" />
     <v-text-field v-if="type === 'text'" :value="value" :id="forId" class="v-input-wrap" @input="onInput" />
-    <v-btn-toggle v-if="type === 'checkBtns'" dense background-color="primary" dark multiple>
+    <v-btn-toggle v-if="type === 'checkBtns'" v-model="selVal" dense background-color="primary" dark multiple>
       <v-btn v-for="(item, index) in checkBtnEntries" :key="index" @input="onCheckInput($event, item)">
         {{ item[0] }}
       </v-btn>
@@ -49,6 +49,10 @@ export default {
       type: [String, Number, Array, Object],
       default: [],
     },
+    selectedValues: {
+      type: Array,
+      default: () => [],
+    },
     items: {
       type: Array,
       default: () => [],
@@ -65,6 +69,7 @@ export default {
   data() {
     return {
       forId: crypto.randomUUID(),
+      selVal: [0, 1],
     };
   },
   computed: {
@@ -72,12 +77,21 @@ export default {
       return Object.entries(this.value);
     },
   },
+  mounted() {
+    if (this.type === 'checkBtns') {
+      console.log(this.selectedValues);
+    }
+  },
   methods: {
     onInput(event) {
       this.$emit('input', event);
     },
     onCheckInput(event, item) {
       this.$emit('input', { value: item[1], isChecked: event });
+    },
+    setSelVal(val) {
+      this.selVal = val;
+      console.log('selVal: ', this.selVal);
     },
   },
 };

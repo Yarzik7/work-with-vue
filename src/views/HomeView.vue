@@ -1,7 +1,14 @@
 <template>
   <div class="home-wrapper">
     <v-form id="home-view-form" class="v-form-wrap" @submit.prevent="onSubmit">
-      <some-input :value="someMap" type="checkBtns" label-text="Chechbox buttons" @input="onThisFormCheckInput" />
+      <some-input
+        ref="btns"
+        :value="someMap"
+        type="checkBtns"
+        label-text="Chechbox buttons"
+        :selected-values="selectedValues"
+        @input="onThisFormCheckInput"
+      />
       <some-input
         ref="someTextarea"
         :value="template"
@@ -79,20 +86,23 @@ export default {
     someOps1: [],
     someOps2: [],
   }),
+  computed: {
+    selectedValues() {
+      return Object.values(this.someMap).filter(v => this.template.includes(v));
+    },
+  },
   mounted() {
     this.getTemplate();
     this.getSomeMap();
+    // this.$refs.btns.setSelVal(Object.values(this.someMap).filter(v => this.template.includes(v)));
+    // console.log(Object.values(this.someMap).filter(v => this.template.includes(v)));
   },
   methods: {
     getTemplate() {
-      this.template = `
-      line1:
-      line2:
-      line3:
-      `;
+      this.template = 'line1: ${value_1}\nline2: ${value_2}\nline3:.';
     },
     getSomeMap() {
-      this.someMap = { Key1: 'value_1', Key2: 'value_2', Key3: 'value_3' };
+      this.someMap = { Key1: '${value_1}', Key2: '${value_2}', Key3: '${value_3}' };
     },
     onSubmit() {
       console.log('Submit');
