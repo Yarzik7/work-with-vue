@@ -11,13 +11,13 @@
       />
       <some-input
         ref="someTextarea"
-        :value="template"
+        :value="dataFromFields.template"
         type="textarea"
         label-text="Test textarea"
         @input="onThisFormInput($event, 'template')"
       />
       <some-input
-        :value="someType"
+        :value="dataFromFields.someType"
         type="select"
         label-text="Select"
         :items="typeItems"
@@ -28,7 +28,7 @@
       <div v-if="someType">
         <some-input
           v-if="someType === 't_1'"
-          :value="someOps1"
+          :value="dataFromFields.someOps1"
           type="multi-select"
           label-text="Multi Select 1"
           :items="optionItems1"
@@ -38,7 +38,7 @@
         />
         <some-input
           v-else
-          :value="someOps2"
+          :value="dataFromFields.someOps2"
           type="multi-select"
           label-text="Multi Select 2"
           :items="optionItems2"
@@ -48,7 +48,7 @@
         />
       </div>
 
-      <some-input :value="text" label-text="Test field" @input="onThisFormInput($event, 'text')" />
+      <some-input :value="dataFromFields.text" label-text="Test field" @input="onThisFormInput($event, 'text')" />
     </v-form>
     <div class="form-control-box">
       <v-btn :form="'home-view-form'" type="submit" class="v-form-btn">Submit</v-btn>
@@ -85,6 +85,7 @@ export default {
     someType: '',
     someOps1: [],
     someOps2: [],
+    dataFromFields: { template: '', text: '', someType: '', someOps1: [], someOps2: [] },
   }),
   computed: {
     selectedValues() {
@@ -100,12 +101,15 @@ export default {
   methods: {
     getTemplate() {
       this.template = 'line1: ${value_1}\nline2: ${value_2}\nline3:.';
+      this.dataFromFields.template = 'line1: ${value_1}\nline2: ${value_2}\nline3:.';
     },
     getSomeMap() {
       this.someMap = { Key1: '${value_1}', Key2: '${value_2}', Key3: '${value_3}' };
+      this.dataFromFields.someMap = { Key1: '${value_1}', Key2: '${value_2}', Key3: '${value_3}' };
     },
     onSubmit() {
       console.log('Submit');
+      console.log(this.dataFromFields);
       console.log({
         template: this.template,
         text: this.text,
@@ -113,9 +117,11 @@ export default {
         ops1: this.someOps1,
         ops2: this.someOps2,
       });
+      console.log('filtered: ', this.filterFields({ ...this.dataFromFields }));
     },
     onThisFormInput(event, field) {
       if (!field) return;
+      this.dataFromFields[field] = event;
       this[field] = event;
     },
     onThisFormCheckInput({ value, isChecked }) {
@@ -124,6 +130,7 @@ export default {
 
       if (!isChecked) {
         this.template = this.template.replace(value, '');
+        this.dataFromFields.template = this.template.replace(value, '');
         return;
       }
 
@@ -135,6 +142,40 @@ export default {
       const newTextareaValue = beforeText + value + afterText;
 
       this.template = newTextareaValue;
+      this.dataFromFields.template = newTextareaValue;
+    },
+    filterFields(dataObj) {
+      const resultObj = {};
+
+      delete dataObj.someMap;
+
+      for (const key in dataObj) {
+        console.log(
+          key,
+          ' ',
+          dataObj[key],
+          ' ',
+          typeof dataObj[key],
+          ' ',
+          Array.isArray(dataObj[key]),
+          ' ',
+          dataObj[key].length,
+          ' ',
+          Array.isArray(dataObj[key]) && dataObj[key].length
+        );
+
+        if (Array.isArray(dataObj[key]) && dataObj[key].length) {
+          console.log('len', dataObj[key].length);
+          resultObj[key] = dataObj[key];
+          continue;
+        } else if (Array.isArray(dataObj[key])) {
+          continue;
+        }
+
+        if (dataObj[key]) resultObj[key] = dataObj[key];
+      }
+
+      return resultObj;
     },
   },
 };
