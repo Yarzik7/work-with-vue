@@ -150,22 +150,7 @@ export default {
       delete dataObj.someMap;
 
       for (const key in dataObj) {
-        console.log(
-          key,
-          ' ',
-          dataObj[key],
-          ' ',
-          typeof dataObj[key],
-          ' ',
-          Array.isArray(dataObj[key]),
-          ' ',
-          dataObj[key].length,
-          ' ',
-          Array.isArray(dataObj[key]) && dataObj[key].length
-        );
-
         if (Array.isArray(dataObj[key]) && dataObj[key].length) {
-          console.log('len', dataObj[key].length);
           resultObj[key] = dataObj[key];
           continue;
         } else if (Array.isArray(dataObj[key])) {
