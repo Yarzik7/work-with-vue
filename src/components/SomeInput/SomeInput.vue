@@ -77,11 +77,6 @@ export default {
       return Object.entries(this.value);
     },
   },
-  mounted() {
-    if (this.type === 'checkBtns') {
-      console.log(this.selectedValues);
-    }
-  },
   methods: {
     onInput(event) {
       this.$emit('input', event);

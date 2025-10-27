@@ -17,6 +17,11 @@ body {
   background-color: var(--bg-color, #000);
 }
 
+a,
+button {
+  transition: all 0.3s ease-in-out;
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -66,4 +71,9 @@ li {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   margin: -1px;
+}
+
+.page-title {
+  margin-bottom: 20px;
+  text-align: center;
 }
